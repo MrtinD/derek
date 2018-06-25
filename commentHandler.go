@@ -252,21 +252,23 @@ func manageLocking(req types.IssueCommentOuter, cmdType string) (string, error) 
 	return buffer.String(), nil
 }
 
+var commandPrefix = "Derek "
+
 func parse(body string) *types.CommentAction {
 
 	commentAction := types.CommentAction{}
 
 	commands := map[string]string{
-		"Derek add label: ":    addLabelConstant,
-		"Derek remove label: ": removeLabelConstant,
-		"Derek assign: ":       assignConstant,
-		"Derek unassign: ":     unassignConstant,
-		"Derek close":          closeConstant,
-		"Derek reopen":         reopenConstant,
-		"Derek set title: ":    setTitleConstant,
-		"Derek edit title: ":   setTitleConstant,
-		"Derek lock":           lockConstant,
-		"Derek unlock":         unlockConstant,
+		commandPrefix + "add label: ":    addLabelConstant,
+		commandPrefix + "remove label: ": removeLabelConstant,
+		commandPrefix + "assign: ":       assignConstant,
+		commandPrefix + "unassign: ":     unassignConstant,
+		commandPrefix + "close":          closeConstant,
+		commandPrefix + "reopen":         reopenConstant,
+		commandPrefix + "set title: ":    setTitleConstant,
+		commandPrefix + "edit title: ":   setTitleConstant,
+		commandPrefix + "lock":           lockConstant,
+		commandPrefix + "unlock":         unlockConstant,
 	}
 
 	for trigger, commandType := range commands {

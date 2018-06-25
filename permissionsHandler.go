@@ -107,6 +107,10 @@ func getConfig(owner string, repository string) (*types.DerekConfig, error) {
 		}
 	}
 
+	if len(config.CommandPrefix) > 0 {
+		commandPrefix = config.CommandPrefix
+	}
+
 	return &config, nil
 }
 

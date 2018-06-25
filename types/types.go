@@ -78,4 +78,7 @@ type DerekConfig struct {
 
 	// Curators is an alias for Maintainers and is only used if the Maintainers list is empty.
 	Curators []string
+
+	// CommandPrefix is used to specify the prefix for Derek commands.
+	CommandPrefix string
 }
