@@ -6,9 +6,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"strings"
-
 	"os"
+	"strings"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/alexellis/derek/auth"
@@ -37,6 +36,15 @@ func handlePullRequest(req types.PullRequestOuter) {
 	client := auth.MakeClient(ctx, token)
 
 	hasUnsignedCommits, err := hasUnsigned(req, client)
+
+	authorAssociation := req.PullRequest.AuthorAssociation
+
+	if firstTimeContributor(authorAssociation) == true {
+		_, res, assignLabelErr := client.Issues.AddLabelsToIssue(ctx, req.Repository.Owner.Login, req.Repository.Name, req.PullRequest.Number, []string{"new-contributor"})
+		if assignLabelErr != nil {
+			log.Fatalf("%s limit: %d, remaining: %d", assignLabelErr, res.Limit, res.Remaining)
+		}
+	}
 
 	if err != nil {
 		log.Fatal(err)
@@ -132,4 +140,11 @@ func hasUnsigned(req types.PullRequestOuter, client *github.Client) (bool, error
 
 func isSigned(msg string) bool {
 	return strings.Contains(msg, "Signed-off-by:")
+}
+
+func firstTimeContributor(label string) bool {
+	if label == "NONE" {
+		return true
+	}
+	return false
 }
